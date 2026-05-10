@@ -103,4 +103,7 @@ public class Jogo {
 
         return sb.toString();
     }
+
+    public void solicitarEscolhaParaVoltarInicio(Jogador j) {
+    }
 }

@@ -81,6 +81,11 @@ public abstract class Jogador {
         return posicao >= 40;
     }
 
+    // Dentro da classe Jogador
+    public void setPosicao(int novaPosicao) {
+        this.posicao = novaPosicao;
+    }
+
     @Override
     public boolean equals(Object outro) {
         if (this == outro) return true;

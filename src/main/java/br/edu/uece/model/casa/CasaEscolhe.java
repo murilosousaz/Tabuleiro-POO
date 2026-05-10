@@ -1,5 +1,6 @@
 package main.java.br.edu.uece.model.casa;
-
+import main.java.br.edu.uece.model.jogador.Jogador;
+import main.java.br.edu.uece.jogo.Jogo;
 
 public class CasaEscolhe extends Casa {
 
@@ -21,4 +22,10 @@ public class CasaEscolhe extends Casa {
     public String toString() {
         return String.format("Casa %d [Escolhe Jogador]", getNumero());
     }
+
+    @Override
+    public void aplicarEfeito(Jogador j, Jogo jogo) {
+        jogo.solicitarEscolhaParaVoltarInicio(j);
+    }
+
 }

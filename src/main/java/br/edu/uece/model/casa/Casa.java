@@ -1,5 +1,10 @@
 package main.java.br.edu.uece.model.casa;
 
+
+// É necessário importar essas classes para os parâmetros do método
+import main.java.br.edu.uece.model.jogador.Jogador;
+import main.java.br.edu.uece.jogo.Jogo;
+
 public abstract class Casa {
 
     protected int numero;
@@ -10,6 +15,8 @@ public abstract class Casa {
         }
         this.numero = numero;
     }
+
+
 
     public int getNumero() {
         return numero;
@@ -44,4 +51,9 @@ public abstract class Casa {
     public String toString() {
         return String.format("Casa %d - %s", numero, getTipo());
     }
+
+    // --- NOVO MÉTODO (Obrigatório para o Polimorfismo) ---
+    // Este método permite que cada tipo de casa execute sua regra do PDF
+    public abstract void aplicarEfeito(Jogador j, Jogo jogo);
+
 }

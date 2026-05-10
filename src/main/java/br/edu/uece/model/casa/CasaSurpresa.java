@@ -1,9 +1,17 @@
 package main.java.br.edu.uece.model.casa;
 
+import main.java.br.edu.uece.jogo.Jogo;
+import main.java.br.edu.uece.model.jogador.Jogador;
+
 public class CasaSurpresa extends Casa {
 
     public CasaSurpresa(int numero) {
         super(numero);
+    }
+
+    @Override
+    public void aplicarEfeito(Jogador j, Jogo jogo) {
+
     }
 
     @Override
@@ -20,4 +28,5 @@ public class CasaSurpresa extends Casa {
     public String toString() {
         return String.format("Casa %d [Surpresa]", getNumero());
     }
+
 }
