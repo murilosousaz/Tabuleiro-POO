@@ -1,0 +1,133 @@
+/* ============================================
+   ESTILO BANCO IMOBILIÁRIO - JOGO DE TABULEIRO
+   ============================================ */
+
+/* Botões com hover effect */
+.button {
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-opacity: 0.9;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button:pressed {
+    -fx-opacity: 0.8;
+    -fx-translate-y: 2px;
+}
+
+.button:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+/* ComboBox estilizado */
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #1a5f7a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.combo-box:hover {
+    -fx-border-color: #43A047;
+}
+
+/* TextField estilizado */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #1a5f7a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.text-field:focused {
+    -fx-border-color: #43A047;
+    -fx-border-width: 2px;
+}
+
+/* ListView estilizado */
+.list-view {
+    -fx-background-color: white;
+}
+
+.list-view .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #333;
+    -fx-font-size: 13px;
+    -fx-padding: 8px;
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: #1a5f7a;
+    -fx-text-fill: white;
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: #e3f2fd;
+}
+
+/* TextArea para log */
+.text-area {
+    -fx-background-color: #f5f5f5;
+}
+
+.text-area .content {
+    -fx-background-color: #f5f5f5;
+}
+
+/* ScrollBar personalizada */
+.scroll-bar {
+    -fx-background-color: #e0e0e0;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #1a5f7a;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #43A047;
+}
+
+/* CheckBox */
+.check-box {
+    -fx-text-fill: #333;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #43A047;
+}
+
+/* Separator */
+.separator .line {
+    -fx-border-color: #bdbdbd;
+    -fx-border-width: 1px;
+}
+
+/* Animações suaves */
+.button,
+.combo-box,
+.text-field {
+    -fx-transition: all 0.2s ease;
+}
+
+/* Labels de título */
+.title-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-text-fill: #1a5f7a;
+}
+
+/* Grid do tabuleiro - casas com efeito 3D */
+.grid-cell {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0, 1, 1);
+}
+
+.grid-cell:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);
+}
