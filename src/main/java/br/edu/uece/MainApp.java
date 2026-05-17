@@ -12,7 +12,7 @@ public class MainApp extends Application {
     private static Stage primaryStage;
     private static Scene setupScene;
     private static Scene gameScene;
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
@@ -37,7 +37,18 @@ public class MainApp extends Application {
 
     public static void carregarTelaSetup() {
         try {
-            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/setup_view.fxml"));
+            System.out.println("Tentando carregar: /fxml/setup_view.fxml");
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/fxml/setup_view.fxml"));
+
+            if (loader.getLocation() == null) {
+                System.err.println("ERRO: Arquivo FXML não encontrado!");
+                System.err.println("Verifique se resources/fxml/setup_view.fxml existe");
+                System.err.println("E se a pasta 'resources' está marcada como Resources Root");
+                return;
+            }
+
             Parent root = loader.load();
 
             setupScene = new Scene(root, 800, 600);
@@ -46,7 +57,7 @@ public class MainApp extends Application {
             try {
                 setupScene.getStylesheets().add(MainApp.class.getResource("/css/style.css").toExternalForm());
             } catch (Exception e) {
-                System.out.println("Arquivo CSS não encontrado.");
+                System.out.println("Arquivo CSS não encontrado (opcional).");
             }
 
             primaryStage.setScene(setupScene);
@@ -59,7 +70,17 @@ public class MainApp extends Application {
 
     public static void carregarTelaJogo() {
         try {
-            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/main_view.fxml"));
+            System.out.println("Tentando carregar: /fxml/main_view.fxml");
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/fxml/main_view.fxml"));
+
+            if (loader.getLocation() == null) {
+                System.err.println("ERRO: Arquivo FXML não encontrado!");
+                System.err.println("Verifique se resources/fxml/main_view.fxml existe");
+                return;
+            }
+
             Parent root = loader.load();
 
             gameScene = new Scene(root, 1200, 800);
@@ -68,7 +89,7 @@ public class MainApp extends Application {
             try {
                 gameScene.getStylesheets().add(MainApp.class.getResource("/css/style.css").toExternalForm());
             } catch (Exception e) {
-                System.out.println("Arquivo CSS não encontrado.");
+                System.out.println("Arquivo CSS não encontrado (opcional).");
             }
 
             primaryStage.setScene(gameScene);
