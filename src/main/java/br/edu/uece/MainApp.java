@@ -1,4 +1,4 @@
-package main.java.br.edu.uece;
+package br.edu.uece;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +19,6 @@ public class MainApp extends Application {
 
         // Configurar o palco principal
         primaryStage.setTitle("Jogo de Tabuleiro - Estilo Banco Imobiliário");
-        primaryStage.setResizable(false);
 
         // Tentar carregar ícone da aplicação
         try {
@@ -44,23 +43,24 @@ public class MainApp extends Application {
 
             if (loader.getLocation() == null) {
                 System.err.println("ERRO: Arquivo FXML não encontrado!");
-                System.err.println("Verifique se resources/fxml/setup_view.fxml existe");
-                System.err.println("E se a pasta 'resources' está marcada como Resources Root");
                 return;
             }
 
             Parent root = loader.load();
 
-            setupScene = new Scene(root, 800, 600);
+            // CORREÇÃO: Aumentamos a altura de 600 para 680 para caber o rodapé inteiro no Fedora
+            setupScene = new Scene(root, 800, 680);
 
-            // Aplicar CSS se existir
             try {
                 setupScene.getStylesheets().add(MainApp.class.getResource("/css/style.css").toExternalForm());
             } catch (Exception e) {
                 System.out.println("Arquivo CSS não encontrado (opcional).");
             }
 
+            // CORREÇÃO: Permitir maximizar e redimensionar a tela livremente
+            primaryStage.setResizable(true); 
             primaryStage.setScene(setupScene);
+            primaryStage.centerOnScreen();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,22 +77,23 @@ public class MainApp extends Application {
 
             if (loader.getLocation() == null) {
                 System.err.println("ERRO: Arquivo FXML não encontrado!");
-                System.err.println("Verifique se resources/fxml/main_view.fxml existe");
                 return;
             }
 
             Parent root = loader.load();
 
-            gameScene = new Scene(root, 1200, 800);
+            gameScene = new Scene(root, 1200, 820);
 
-            // Aplicar CSS se existir
             try {
                 gameScene.getStylesheets().add(MainApp.class.getResource("/css/style.css").toExternalForm());
             } catch (Exception e) {
                 System.out.println("Arquivo CSS não encontrado (opcional).");
             }
 
+            // CORREÇÃO: Permitir maximizar também na tela do jogo
+            primaryStage.setResizable(true);
             primaryStage.setScene(gameScene);
+            primaryStage.centerOnScreen();
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,7 +1,7 @@
-package main.java.br.edu.uece.model.casa;
+package br.edu.uece.model.casa;
 
-import main.java.br.edu.uece.model.jogador.Jogador;
-import main.java.br.edu.uece.jogo.Jogo;
+import br.edu.uece.jogo.Jogo;
+import br.edu.uece.model.jogador.Jogador;
 import java.util.Random;
 
 public class CasaSurpresa extends Casa {

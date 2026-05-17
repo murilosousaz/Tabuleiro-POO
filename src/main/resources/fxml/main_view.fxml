@@ -6,10 +6,9 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="main.java.br.edu.uece.controller.GameController"
+            fx:controller="br.edu.uece.controller.GameController"
             style="-fx-background-color: linear-gradient(to bottom, #2e7d32, #1b5e20);">
     
-    <!-- CABEÇALHO -->
     <top>
         <VBox style="-fx-background-color: rgba(0, 0, 0, 0.3); -fx-padding: 15;">
             <HBox alignment="CENTER" spacing="20">
@@ -22,7 +21,6 @@
             
             <Separator style="-fx-background-color: #FFD700; -fx-padding: 5 0 0 0;"/>
             
-            <!-- Informações do Jogador Atual -->
             <HBox alignment="CENTER" spacing="15" style="-fx-padding: 10 0 0 0;">
                 <Label text="Jogador Atual:" style="-fx-font-size: 16px; -fx-text-fill: white; -fx-font-weight: bold;"/>
                 <Label fx:id="jogadorAtualLabel" text="---" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 5 15; -fx-background-color: rgba(255, 255, 255, 0.2); -fx-background-radius: 8;"/>
@@ -30,24 +28,19 @@
         </VBox>
     </top>
     
-    <!-- CONTEÚDO PRINCIPAL -->
     <center>
         <HBox spacing="20" style="-fx-padding: 20;">
             
-            <!-- COLUNA ESQUERDA - Tabuleiro e Controles -->
             <VBox spacing="15" HBox.hgrow="ALWAYS">
                 
-                <!-- TABULEIRO -->
                 <VBox spacing="10" style="-fx-background-color: rgba(255, 255, 255, 0.95); -fx-padding: 20; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0, 0, 5);">
                     <Label text="🎯 TABULEIRO" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;"/>
                     <Separator/>
                     
-                    <!-- Grid do Tabuleiro -->
                     <GridPane fx:id="tabuleiroGrid" hgap="2" vgap="2" alignment="CENTER"
                               style="-fx-background-color: #424242; -fx-padding: 5; -fx-background-radius: 10;">
                     </GridPane>
                     
-                    <!-- Legenda -->
                     <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
                         <VBox alignment="CENTER" spacing="3">
                             <HBox spacing="5" alignment="CENTER">
@@ -93,12 +86,10 @@
                     </HBox>
                 </VBox>
                 
-                <!-- CONTROLES DO JOGO -->
                 <VBox spacing="15" style="-fx-background-color: rgba(255, 255, 255, 0.95); -fx-padding: 20; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0, 0, 5);">
                     <Label text="🎮 CONTROLES" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;"/>
                     <Separator/>
                     
-                    <!-- Dados -->
                     <HBox spacing="20" alignment="CENTER">
                         <VBox alignment="CENTER" spacing="5">
                             <Label text="Dado 1" style="-fx-font-weight: bold; -fx-font-size: 12px;"/>
@@ -123,7 +114,6 @@
                         </VBox>
                     </HBox>
                     
-                    <!-- Botões -->
                     <Button fx:id="jogarDadosBtn" text="🎲 JOGAR DADOS" 
                             prefHeight="50"
                             style="-fx-background-color: linear-gradient(to bottom, #43A047, #2E7D32); -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);">
@@ -140,7 +130,6 @@
                         </font>
                     </Button>
                     
-                    <!-- Modo Debug -->
                     <Separator/>
                     <CheckBox fx:id="modoDebugCheckBox" text="🔧 Modo Debug (Escolher casa manualmente)" 
                               style="-fx-font-size: 12px; -fx-font-weight: bold;"/>
@@ -153,10 +142,8 @@
                 </VBox>
             </VBox>
             
-            <!-- COLUNA DIREITA - Placar e Log -->
             <VBox spacing="15" prefWidth="350">
                 
-                <!-- PLACAR -->
                 <VBox spacing="10" style="-fx-background-color: rgba(255, 255, 255, 0.95); -fx-padding: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0, 0, 5);">
                     <Label text="🏆 PLACAR" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;"/>
                     <Separator/>
@@ -164,7 +151,6 @@
                               style="-fx-font-size: 13px; -fx-font-family: 'Courier New'; -fx-border-color: #2e7d32; -fx-border-width: 2; -fx-border-radius: 5;"/>
                 </VBox>
                 
-                <!-- LOG DE EVENTOS -->
                 <VBox spacing="10" VBox.vgrow="ALWAYS" style="-fx-background-color: rgba(255, 255, 255, 0.95); -fx-padding: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0, 0, 5);">
                     <Label text="📜 LOG DE EVENTOS" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;"/>
                     <Separator/>
@@ -175,7 +161,6 @@
         </HBox>
     </center>
     
-    <!-- RODAPÉ -->
     <bottom>
         <HBox alignment="CENTER" spacing="10" style="-fx-background-color: rgba(0, 0, 0, 0.3); -fx-padding: 10;">
             <Label text="💡 Dica: Use o modo Debug para testar as casas especiais!" 

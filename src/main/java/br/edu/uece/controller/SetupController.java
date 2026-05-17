@@ -1,16 +1,13 @@
-package main.java.br.edu.uece.controller;
+package br.edu.uece.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.geometry.Pos;
+import javafx.application.Platform;
 
-import main.java.br.edu.uece.model.jogador.*;
-import main.java.br.edu.uece.MainApp;
+import br.edu.uece.model.jogador.*;
+import br.edu.uece.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,24 +62,26 @@ public class SetupController {
         tipoJogadorCombo.setItems(FXCollections.observableArrayList("Normal", "Sorte", "Azarado"));
         tipoJogadorCombo.setValue("Normal");
 
-        // Configurar ComboBox de cores
-        atualizarCoresDisponiveis();
-
         // Configurar ListView
         listaJogadoresView.setItems(jogadoresDisplay);
 
-        // Configurar botões
+        // Configurar botões padrões
         removerBtn.setDisable(true);
         iniciarJogoBtn.setDisable(true);
 
-        // Adicionar listeners
+        // Adicionar listeners de seleção na lista
         listaJogadoresView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> removerBtn.setDisable(newVal == null)
         );
 
+        // Evento ao apertar Enter no campo de texto
         nomeJogadorField.setOnAction(e -> handleAdicionar());
 
-        statusLabel.setText("Adicione de 2 a 6 jogadores para começar!");
+        // CORRIGIDO: Envolvendo a atualização de componentes de texto em um runLater para evitar quebra gráfica
+        Platform.runLater(() -> {
+            atualizarCoresDisponiveis();
+            statusLabel.setText("Adicione de 2 a 6 jogadores para começar!");
+        });
     }
 
     @FXML
@@ -132,7 +131,7 @@ public class SetupController {
                 break;
         }
 
-        // Adicionar jogador
+        // Adicionar jogador nas listas
         jogadores.add(novoJogador);
         jogadoresDisplay.add(String.format("%s (%s) - %s", nome, tipo, corNome));
 
@@ -140,11 +139,11 @@ public class SetupController {
         coresDisponiveis.remove(corNome);
         atualizarCoresDisponiveis();
 
-        // Limpar campos
+        // Limpar campos de entrada
         nomeJogadorField.clear();
         nomeJogadorField.requestFocus();
 
-        // Atualizar status
+        // Atualizar status do botão de início
         atualizarStatus();
     }
 
@@ -158,9 +157,10 @@ public class SetupController {
 
             // Devolver cor para lista de disponíveis
             String corNome = obterNomeCor(jogadorRemovido.getCor());
-            coresDisponiveis.add(corNome);
+            if (!coresDisponiveis.contains(corNome) && !corNome.equals("Desconhecido")) {
+                coresDisponiveis.add(corNome);
+            }
             atualizarCoresDisponiveis();
-
             atualizarStatus();
         }
     }
@@ -172,10 +172,10 @@ public class SetupController {
             return;
         }
 
-        // Passar jogadores para o GameController
+        // Passar jogadores para o GameController estático
         GameController.setJogadoresIniciais(new ArrayList<>(jogadores));
 
-        // Carregar tela do jogo
+        // Carregar tela principal do jogo
         MainApp.carregarTelaJogo();
     }
 
@@ -183,6 +183,8 @@ public class SetupController {
         corJogadorCombo.setItems(FXCollections.observableArrayList(coresDisponiveis));
         if (!coresDisponiveis.isEmpty()) {
             corJogadorCombo.setValue(coresDisponiveis.get(0));
+        } else {
+            corJogadorCombo.setValue(null);
         }
     }
 
@@ -196,17 +198,17 @@ public class SetupController {
             statusLabel.setText("Adicione mais 1 jogador para começar!");
             iniciarJogoBtn.setDisable(true);
         } else if (numJogadores < 6) {
-            statusLabel.setText(String.format(" %d jogadores prontos! Pode adicionar mais ou iniciar.", numJogadores));
+            statusLabel.setText(String.format("%d jogadores prontos! Pode adicionar mais ou iniciar.", numJogadores));
             iniciarJogoBtn.setDisable(false);
         } else {
-            statusLabel.setText(" 6 jogadores (máximo atingido). Pronto para iniciar!");
+            statusLabel.setText("6 jogadores (máximo atingido). Pronto para iniciar!");
             iniciarJogoBtn.setDisable(false);
         }
     }
 
     private String obterCorHex(String nomeCor) {
         for (String[] cor : CORES) {
-            if (cor[0].equals(nomeCor)) {
+            if (cor[0].equalsIgnoreCase(nomeCor)) {
                 return cor[1];
             }
         }
@@ -215,7 +217,7 @@ public class SetupController {
 
     private String obterNomeCor(String hexCor) {
         for (String[] cor : CORES) {
-            if (cor[1].equals(hexCor)) {
+            if (cor[1].equalsIgnoreCase(hexCor)) {
                 return cor[0];
             }
         }

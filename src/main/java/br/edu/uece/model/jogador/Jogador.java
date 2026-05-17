@@ -1,4 +1,4 @@
-package main.java.br.edu.uece.model.jogador;
+package br.edu.uece.model.jogador;
 
 import java.util.Random;
 
@@ -27,17 +27,9 @@ public abstract class Jogador {
         this.random = new Random();
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public String getCor() {
-        return cor;
-    }
-
-    public int getPosicao() {
-        return posicao;
-    }
+    public String getNome() {return nome;}
+    public String getCor() {return cor;}
+    public int getPosicao() {return posicao;}
 
     public void mover(int novaPosicao) {
         if (novaPosicao < 0) {
@@ -49,34 +41,15 @@ public abstract class Jogador {
         }
     }
 
-    public int getNumeroJogadas() {
-        return numeroJogadas;
-    }
-
-    public void incrementarJogadas() {
-        this.numeroJogadas++;
-    }
-
-    public void resetarJogadas() {
-        this.numeroJogadas = 0;
-    }
-
-    public boolean devePerderVez() {
-        return perderVez;
-    }
-
-    public void setPerderVez(boolean perderVez) {
-        this.perderVez = perderVez;
-    }
-
+    public int getNumeroJogadas() {return numeroJogadas;}
+    public void incrementarJogadas() {this.numeroJogadas++;}
+    public void resetarJogadas() {this.numeroJogadas = 0;}
+    public boolean devePerderVez() {return perderVez;}
+    public void setPerderVez(boolean perderVez) {this.perderVez = perderVez;}
     public abstract int[] jogarDados();
-
     public abstract String getTipo();
-
-    protected int rolarDado() {
-        return random.nextInt(6) + 1;
-    }
-
+    protected int rolarDado() {return random.nextInt(6) + 1;}
+    
     public boolean venceu() {
         return posicao >= 40;
     }
@@ -98,4 +71,9 @@ public abstract class Jogador {
     public String toString() {
         return String.format("%s (%s) - Casa %d", nome, getTipo(), posicao);
     }
+
+    public void setPreso(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

@@ -1,6 +1,6 @@
-package main.java.br.edu.uece.jogo;
+package br.edu.uece.jogo;
 
-import main.java.br.edu.uece.model.casa.*;
+import br.edu.uece.model.casa.*;
 
 import java.util.ArrayList;
 import java.util.List;

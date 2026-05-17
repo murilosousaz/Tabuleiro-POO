@@ -1,4 +1,4 @@
-package main.java.br.edu.uece.model.jogador;
+package br.edu.uece.model.jogador;
 
 public class JogadorSorte extends Jogador {
 
