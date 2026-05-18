@@ -8,22 +8,16 @@ public class JogadorSorte extends Jogador {
 
     @Override
     public int[] jogarDados() {
-        // Primeira tentativa
-        int dado1_tentativa1 = rolarDado();
-        int dado2_tentativa1 = rolarDado();
-        int soma1 = dado1_tentativa1 + dado2_tentativa1;
+        int dado1, dado2, soma;
 
-        // Segunda tentativa
-        int dado1_tentativa2 = rolarDado();
-        int dado2_tentativa2 = rolarDado();
-        int soma2 = dado1_tentativa2 + dado2_tentativa2;
+        // Loop de validação estrita: força a rolagem até que a soma seja maior ou igual a 7
+        do {
+            dado1 = rolarDado();
+            dado2 = rolarDado();
+            soma = dado1 + dado2;
+        } while (soma < 7); // Se a soma for menor que 7, joga novamente
 
-        // Retorna a tentativa com maior soma
-        if (soma1 >= soma2) {
-            return new int[]{dado1_tentativa1, dado2_tentativa1};
-        } else {
-            return new int[]{dado1_tentativa2, dado2_tentativa2};
-        }
+        return new int[]{dado1, dado2};
     }
 
     @Override
