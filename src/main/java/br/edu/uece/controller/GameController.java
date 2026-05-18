@@ -132,24 +132,23 @@ public class GameController {
     }
 
     private void renderizarTabuleiro() {
-        tabuleiroGrid.getChildren().clear();
+    tabuleiroGrid.getChildren().clear();
 
-        int numCasas = 40;
-        int colunasMax = 10;
+    // Criar as 40 casas posicionando-as apenas nas bordas do quadrado 11x11
+    for (int i = 0; i < 40; i++) {
+        Label casaLabel = new Label(String.valueOf(i));
+        casaLabel.setStyle(getEstiloCasa(i));
+        casaLabel.setPrefSize(60, 60);
+        casaLabel.setAlignment(javafx.geometry.Pos.CENTER);
 
-        for (int i = 0; i <= numCasas; i++) {
-            Label casaLabel = new Label(String.valueOf(i));
-            casaLabel.setStyle(getEstiloCasa(i));
-            casaLabel.setPrefSize(60, 60);
-            casaLabel.setAlignment(javafx.geometry.Pos.CENTER);
+        // Calcula a posição exata na borda do quadrado
+        int[] pos = calcularLinhaColunaBorda(i);
+        int coluna = pos[0];
+        int linha = pos[1];
 
-            // Calcular posição no grid (serpentear)
-            int linha = i / colunasMax;
-            int coluna = (linha % 2 == 0) ? (i % colunasMax) : (colunasMax - 1 - (i % colunasMax));
-
-            tabuleiroGrid.add(casaLabel, coluna, linha);
-        }
+        tabuleiroGrid.add(casaLabel, coluna, linha);
     }
+}
 
     private String getEstiloCasa(int numeroCasa) {
         String baseStyle = "-fx-border-color: #333; -fx-border-width: 1; -fx-font-size: 14px; -fx-font-weight: bold;";
@@ -182,43 +181,46 @@ public class GameController {
     }
 
     private void posicionarJogadorNoCasa(Jogador jogador, int numeroCasa) {
-        Circle circulo = jogadorCirculoMap.get(jogador);
-        if (circulo == null) return;
+    Circle circulo = jogadorCirculoMap.get(jogador);
+    if (circulo == null) return;
 
-        // Remover do pai anterior com segurança
-        if (circulo.getParent() != null) {
-            ((javafx.scene.layout.Pane) circulo.getParent()).getChildren().remove(circulo);
-        }
+    if (circulo.getParent() != null) {
+        ((javafx.scene.layout.Pane) circulo.getParent()).getChildren().remove(circulo);
+    }
 
-        int colunasMax = 10;
-        int linha = numeroCasa / colunasMax;
-        int coluna = (linha % 2 == 0) ? (numeroCasa % colunasMax) : (colunasMax - 1 - (numeroCasa % colunasMax));
+    // Se o jogador passar da casa 40 (por exemplo, 42), ele trava na 40
+    int casaEfetiva = Math.min(numeroCasa, 40);
 
-        for (javafx.scene.Node node : tabuleiroGrid.getChildren()) {
-            Integer nodeCol = GridPane.getColumnIndex(node);
-            Integer nodeRow = GridPane.getRowIndex(node);
+    // Calcula a posição usando a nova lógica de borda quadrada
+    int[] pos = calcularLinhaColunaBorda(casaEfetiva);
+    int coluna = pos[0];
+    int linha = pos[1];
 
-            if (nodeCol != null && nodeRow != null && nodeCol == coluna && nodeRow == linha) {
-                if (node instanceof Label) {
-                    Label casaLabel = (Label) node;
+    for (javafx.scene.Node node : tabuleiroGrid.getChildren()) {
+        Integer nodeCol = GridPane.getColumnIndex(node);
+        Integer nodeRow = GridPane.getRowIndex(node);
 
-                    if (!(casaLabel.getGraphic() instanceof javafx.scene.layout.StackPane)) {
-                        javafx.scene.layout.StackPane stack = new javafx.scene.layout.StackPane();
-                        casaLabel.setGraphic(stack);
-                    }
+        if (nodeCol != null && nodeRow != null && nodeCol == coluna && nodeRow == linha) {
+            if (node instanceof Label) {
+                Label casaLabel = (Label) node;
 
-                    javafx.scene.layout.StackPane stack = (javafx.scene.layout.StackPane) casaLabel.getGraphic();
-
-                    if (!stack.getChildren().contains(circulo)) {
-                        stack.getChildren().add(circulo);
-                    }
-
-                    ajustarPosicionamentoMultiplosJogadores(stack);
-                    break;
+                if (!(casaLabel.getGraphic() instanceof javafx.scene.layout.StackPane)) {
+                    javafx.scene.layout.StackPane stack = new javafx.scene.layout.StackPane();
+                    casaLabel.setGraphic(stack);
                 }
+
+                javafx.scene.layout.StackPane stack = (javafx.scene.layout.StackPane) casaLabel.getGraphic();
+
+                if (!stack.getChildren().contains(circulo)) {
+                    stack.getChildren().add(circulo);
+                }
+
+                ajustarPosicionamentoMultiplosJogadores(stack);
+                break;
             }
         }
     }
+}
 
     private void ajustarPosicionamentoMultiplosJogadores(javafx.scene.layout.StackPane stack) {
         int numJogadores = stack.getChildren().size();
@@ -538,5 +540,31 @@ public class GameController {
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
         alert.showAndWait();
+    }
+    
+    private int[] calcularLinhaColunaBorda(int numeroCasa) {
+        int coluna = 0;
+        int linha = 0;
+
+        // Lógica para contornar um quadrado 11x11 (índices de 0 a 10)
+        if (numeroCasa <= 10) {
+            // Borda Superior: vai da esquerda para a direita (linha 0)
+            coluna = numeroCasa;
+            linha = 0;
+        } else if (numeroCasa <= 20) {
+            // Borda Direita: vai de cima para baixo (coluna 10)
+            coluna = 10;
+            linha = numeroCasa - 10;
+        } else if (numeroCasa <= 30) {
+            // Borda Inferior: vai da direita para a esquerda (linha 10)
+            coluna = 10 - (numeroCasa - 20);
+            linha = 10;
+        } else {
+            // Borda Esquerda: vai de baixo para cima (coluna 0)
+            coluna = 0;
+            linha = 10 - (numeroCasa - 30);
+        }
+
+        return new int[]{coluna, linha};
     }
 }

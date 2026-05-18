@@ -4,79 +4,71 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="br.edu.uece.controller.SetupController"
-            style="-fx-background-color: linear-gradient(to bottom, #1a5f7a, #0d3b52);">
+            style="-fx-background-color: #123516;">
     
     <top>
-        <VBox alignment="CENTER" spacing="10" style="-fx-background-color: rgba(255, 255, 255, 0.1); -fx-padding: 20;">
-            <Label text="🎲 JOGO DE TABULEIRO 🎲" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #FFD700;">
+        <VBox alignment="CENTER" spacing="8" style="-fx-background-color: rgba(0, 0, 0, 0.2); -fx-padding: 20;">
+            <Label text="JOGO DE TABULEIRO" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #D4AF37; -fx-letter-spacing: 2;">
                 <font>
-                    <Font name="System Bold" size="32"/>
+                    <Font name="System Bold" size="28"/>
                 </font>
             </Label>
-            <Label text="Estilo Banco Imobiliário" style="-fx-font-size: 16px; -fx-text-fill: #FFFFFF; -fx-font-style: italic;"/>
-            <Separator prefWidth="400" style="-fx-background-color: #FFD700;"/>
+            <Label text="Estilo Banco Imobiliário — Configuração Inicial" style="-fx-font-size: 13px; -fx-text-fill: #E0E0E0; -fx-font-style: italic;"/>
+            <Separator maxWidth="400" style="-fx-background-color: #D4AF37; -fx-opacity: 0.3;"/>
         </VBox>
     </top>
     
     <center>
-        <HBox spacing="30" alignment="CENTER" style="-fx-padding: 30;">
+        <HBox spacing="30" alignment="CENTER" style="-fx-padding: 20 30 30 30;">
             
-            <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: rgba(255, 255, 255, 0.95); -fx-background-radius: 15; -fx-padding: 25; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);">
-                <Label text="➕ Adicionar Jogador" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1a5f7a;"/>
+            <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #FDFDFB; -fx-background-radius: 12; -fx-padding: 25; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);">
+                <Label text="Adicionar Jogador" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #123516;"/>
+                <Separator prefWidth="280"/>
                 
-                <Separator prefWidth="300"/>
-                
-                <VBox spacing="5">
-                    <Label text="Nome do Jogador:" style="-fx-font-weight: bold; -fx-text-fill: #333;"/>
+                <VBox spacing="6">
+                    <Label text="Nome do Jogador:" style="-fx-font-weight: bold; -fx-text-fill: #444; -fx-font-size: 12px;"/>
                     <TextField fx:id="nomeJogadorField" promptText="Digite o nome..." prefWidth="280"
-                               style="-fx-font-size: 14px; -fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #1a5f7a; -fx-border-radius: 5;"/>
+                               style="-fx-font-size: 13px; -fx-padding: 8; -fx-background-color: #FAFAFA; -fx-border-color: #DDD; -fx-border-radius: 4; -fx-background-radius: 4;"/>
                 </VBox>
                 
-                <VBox spacing="5">
-                    <Label text="Tipo de Jogador:" style="-fx-font-weight: bold; -fx-text-fill: #333;"/>
+                <VBox spacing="6">
+                    <Label text="Tipo de Jogador:" style="-fx-font-weight: bold; -fx-text-fill: #444; -fx-font-size: 12px;"/>
                     <ComboBox fx:id="tipoJogadorCombo" prefWidth="280"
-                              style="-fx-font-size: 14px; -fx-background-radius: 5;"/>
+                              style="-fx-font-size: 13px; -fx-background-color: #FAFAFA; -fx-border-color: #DDD; -fx-border-radius: 4;"/>
                     <Label text="• Normal: Joga dados normalmente&#10;• Sorte: Rola 2x, escolhe melhor&#10;• Azarado: Rola 2x, fica com pior" 
-                           style="-fx-font-size: 10px; -fx-text-fill: #666; -fx-wrap-text: true;" 
+                           style="-fx-font-size: 10px; -fx-text-fill: #777; -fx-wrap-text: true;" 
                            prefWidth="280"/>
                 </VBox>
                 
-                <VBox spacing="5">
-                    <Label text="Cor do Pino:" style="-fx-font-weight: bold; -fx-text-fill: #333;"/>
+                <VBox spacing="6">
+                    <Label text="Cor do Pino:" style="-fx-font-weight: bold; -fx-text-fill: #444; -fx-font-size: 12px;"/>
                     <ComboBox fx:id="corJogadorCombo" prefWidth="280"
-                              style="-fx-font-size: 14px; -fx-background-radius: 5;"/>
+                              style="-fx-font-size: 13px; -fx-background-color: #FAFAFA; -fx-border-color: #DDD; -fx-border-radius: 4;"/>
                 </VBox>
                 
-                <Button fx:id="adicionarBtn" text="➕ Adicionar Jogador" onAction="#handleAdicionar"
-                        prefWidth="280" prefHeight="40"
-                        style="-fx-background-color: linear-gradient(to bottom, #43A047, #2E7D32); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;">
-                    <font>
-                        <Font name="System Bold" size="14"/>
-                    </font>
-                </Button>
+                <Button fx:id="adicionarBtn" text="➕ ADICIONAR JOGADOR" onAction="#handleAdicionar"
+                        prefWidth="280" prefHeight="38"
+                        style="-fx-background-color: #2E7D32; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;"/>
                 
                 <Label text="(Mínimo: 2 jogadores | Máximo: 6 jogadores)" 
-                       style="-fx-font-size: 10px; -fx-text-fill: #888; -fx-font-style: italic;"/>
+                       style="-fx-font-size: 10px; -fx-text-fill: #999; -fx-font-style: italic;"/>
             </VBox>
             
-            <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: rgba(255, 255, 255, 0.95); -fx-background-radius: 15; -fx-padding: 25; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);">
-                <Label text="👥 Jogadores Cadastrados" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1a5f7a;"/>
+            <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #FDFDFB; -fx-background-radius: 12; -fx-padding: 25; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);">
+                <Label text="Jogadores Cadastrados" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #123516;"/>
+                <Separator prefWidth="320"/>
                 
-                <Separator prefWidth="350"/>
+                <ListView fx:id="listaJogadoresView" prefWidth="320" prefHeight="235"
+                          style="-fx-border-color: #E0E0E0; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-color: #FAFAFA; -fx-font-size: 13px;"/>
                 
-                <ListView fx:id="listaJogadoresView" prefWidth="350" prefHeight="250"
-                          style="-fx-border-color: #1a5f7a; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5;"/>
-                
-                <Button fx:id="removerBtn" text="🗑️ Remover Selecionado" onAction="#handleRemover"
-                        prefWidth="350" prefHeight="35"
-                        style="-fx-background-color: linear-gradient(to bottom, #E53935, #C62828); -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;">
+                <Button fx:id="removerBtn" text="🗑️ REMOVER SELECIONADO" onAction="#handleRemover"
+                        prefWidth="320" prefHeight="35"
+                        style="-fx-background-color: #C62828; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;">
                     <font>
-                        <Font name="System Bold" size="13"/>
+                        <Font name="System Bold" size="12"/>
                     </font>
                 </Button>
             </VBox>
@@ -85,21 +77,21 @@
     </center>
     
     <bottom>
-        <VBox spacing="15" alignment="CENTER" style="-fx-background-color: rgba(255, 255, 255, 0.1); -fx-padding: 20;">
+        <VBox spacing="12" alignment="CENTER" style="-fx-background-color: rgba(0, 0, 0, 0.2); -fx-padding: 15 20 20 20;">
             
             <Label fx:id="statusLabel" text="Adicione de 2 a 6 jogadores para começar!" 
-                   style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF; -fx-font-weight: bold;"/>
+                   style="-fx-font-size: 13px; -fx-text-fill: #E0E0E0; -fx-font-weight: bold;"/>
             
             <Button fx:id="iniciarJogoBtn" text="🎮 INICIAR JOGO" onAction="#handleIniciarJogo"
-                    prefWidth="400" prefHeight="50"
-                    style="-fx-background-color: linear-gradient(to bottom, #FFD700, #FFA000); -fx-text-fill: #1a5f7a; -fx-font-size: 20px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0, 0, 5);">
+                    prefWidth="350" prefHeight="45"
+                    style="-fx-background-color: #D4AF37; -fx-text-fill: #123516; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3);">
                 <font>
-                    <Font name="System Bold" size="20"/>
+                    <Font name="System Bold" size="16"/>
                 </font>
             </Button>
             
-            <Label text="Desenvolvido para disciplina de POO - UECE" 
-                   style="-fx-font-size: 10px; -fx-text-fill: rgba(255, 255, 255, 0.7); -fx-font-style: italic;"/>
+            <Label text="Disciplina de Programação Orientada a Objetos — UECE" 
+                   style="-fx-font-size: 10px; -fx-text-fill: rgba(255, 255, 255, 0.5); -fx-font-style: italic;"/>
         </VBox>
     </bottom>
     

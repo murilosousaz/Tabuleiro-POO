@@ -49,10 +49,7 @@ public abstract class Jogador {
     public abstract int[] jogarDados();
     public abstract String getTipo();
     protected int rolarDado() {return random.nextInt(6) + 1;}
-    
-    public boolean venceu() {
-        return posicao >= 40;
-    }
+    public boolean venceu() {return posicao >= 40;}
 
     @Override
     public boolean equals(Object outro) {
