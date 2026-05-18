@@ -42,7 +42,7 @@
                     
                     <HBox spacing="12" alignment="CENTER" style="-fx-padding: 4 0 0 0;">
                         <HBox spacing="4" alignment="CENTER">
-                            <Label style="-fx-background-color: #4CAF50; -fx-pref-width: 10; -fx-pref-height: 10; -fx-background-radius: 2 Haus;"/>
+                            <Label style="-fx-background-color: #4CAF50; -fx-pref-width: 10; -fx-pref-height: 10; -fx-background-radius: 2;"/>
                             <Label text="Início" style="-fx-font-size: 10px; -fx-text-fill: #555;"/>
                         </HBox>
                         <HBox spacing="4" alignment="CENTER">
@@ -113,7 +113,7 @@
                         <VBox alignment="CENTER" spacing="4">
                             <Label text="Total" style="-fx-font-size: 11px; -fx-text-fill: #666;"/>
                             <Label fx:id="somaLabel" text="-" 
-                                       style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-color: #FFD700; -fx-text-fill: #333; -fx-pref-width: 48; -fx-pref-height: 48; -fx-alignment: center; -fx-background-radius: 6;"/>
+                                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-color: #FFD700; -fx-text-fill: #333; -fx-pref-width: 48; -fx-pref-height: 48; -fx-alignment: center; -fx-background-radius: 6;"/>
                         </VBox>
                     </HBox>
                     
@@ -125,6 +125,10 @@
                         <Button fx:id="proximoJogadorBtn" text="▶️ PRÓXIMO JOGADOR" 
                                 prefHeight="42" prefWidth="180"
                                 style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+
+                        <Button fx:id="voltarMenuBtn" text="🔄 VOLTAR PARA O MENU" 
+                                prefHeight="42" prefWidth="200" visible="false" onAction="#handleVoltarMenu"
+                                style="-fx-background-color: #D4AF37; -fx-text-fill: #123516; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
                     </HBox>
                     
                     <HBox alignment="CENTER" spacing="12" style="-fx-background-color: #F5F5F5; -fx-padding: 8 15; -fx-background-radius: 6; -fx-border-color: #E0E0E0; -fx-border-radius: 6;">

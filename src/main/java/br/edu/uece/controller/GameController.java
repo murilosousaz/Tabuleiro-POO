@@ -27,6 +27,8 @@ public class GameController {
     @FXML
     private Button proximoJogadorBtn;
     @FXML
+    private Button voltarMenuBtn; // Adicionado para gerenciar o retorno à tela inicial
+    @FXML
     private Label jogadorAtualLabel;
     @FXML
     private Label dado1Label;
@@ -65,6 +67,7 @@ public class GameController {
         debugBox.setManaged(false);
         proximoJogadorBtn.setVisible(false);
         proximoJogadorBtn.setManaged(false);
+        voltarMenuBtn.setVisible(false); // Mantém o botão de reset oculto no início do jogo
 
         // Configurar eventos
         modoDebugCheckBox.setOnAction(e -> toggleModoDebug());
@@ -78,7 +81,7 @@ public class GameController {
             }
         });
 
-        // CORRIGIDO: Colocado dentro de um runLater para evitar travar o carregamento do FXML
+        // Executado em runLater para garantir o carregamento do ecossistema FXML
         Platform.runLater(() -> {
             logMensagem("=== Jogo de Tabuleiro Iniciado ===");
             logMensagem("Configure os jogadores e inicie o jogo!");
@@ -105,10 +108,7 @@ public class GameController {
             return;
         }
 
-        // Criar instância do jogo
         jogo = new Jogo(jogadores);
-
-        // Renderizar tabuleiro
         renderizarTabuleiro();
 
         // Posicionar jogadores no início
@@ -118,7 +118,6 @@ public class GameController {
             posicionarJogadorNoCasa(jogador, 0);
         }
 
-        // Atualizar interface
         atualizarJogadorAtual();
         atualizarPlacar();
 
@@ -132,23 +131,19 @@ public class GameController {
     }
 
     private void renderizarTabuleiro() {
-    tabuleiroGrid.getChildren().clear();
+        tabuleiroGrid.getChildren().clear();
 
-    // Criar as 40 casas posicionando-as apenas nas bordas do quadrado 11x11
-    for (int i = 0; i < 40; i++) {
-        Label casaLabel = new Label(String.valueOf(i));
-        casaLabel.setStyle(getEstiloCasa(i));
-        casaLabel.setPrefSize(60, 60);
-        casaLabel.setAlignment(javafx.geometry.Pos.CENTER);
+        // Criar as 40 casas posicionando-as nas bordas do quadrado 11x11
+        for (int i = 0; i < 40; i++) {
+            Label casaLabel = new Label(String.valueOf(i));
+            casaLabel.setStyle(getEstiloCasa(i));
+            casaLabel.setPrefSize(60, 60);
+            casaLabel.setAlignment(javafx.geometry.Pos.CENTER);
 
-        // Calcula a posição exata na borda do quadrado
-        int[] pos = calcularLinhaColunaBorda(i);
-        int coluna = pos[0];
-        int linha = pos[1];
-
-        tabuleiroGrid.add(casaLabel, coluna, linha);
+            int[] pos = calcularLinhaColunaBorda(i);
+            tabuleiroGrid.add(casaLabel, pos[0], pos[1]);
+        }
     }
-}
 
     private String getEstiloCasa(int numeroCasa) {
         String baseStyle = "-fx-border-color: #333; -fx-border-width: 1; -fx-font-size: 14px; -fx-font-weight: bold;";
@@ -181,46 +176,43 @@ public class GameController {
     }
 
     private void posicionarJogadorNoCasa(Jogador jogador, int numeroCasa) {
-    Circle circulo = jogadorCirculoMap.get(jogador);
-    if (circulo == null) return;
+        Circle circulo = jogadorCirculoMap.get(jogador);
+        if (circulo == null) return;
 
-    if (circulo.getParent() != null) {
-        ((javafx.scene.layout.Pane) circulo.getParent()).getChildren().remove(circulo);
-    }
+        if (circulo.getParent() != null) {
+            ((javafx.scene.layout.Pane) circulo.getParent()).getChildren().remove(circulo);
+        }
 
-    // Se o jogador passar da casa 40 (por exemplo, 42), ele trava na 40
-    int casaEfetiva = Math.min(numeroCasa, 40);
+        int casaEfetiva = Math.min(numeroCasa, 40);
+        int[] pos = calcularLinhaColunaBorda(casaEfetiva);
+        int coluna = pos[0];
+        int linha = pos[1];
 
-    // Calcula a posição usando a nova lógica de borda quadrada
-    int[] pos = calcularLinhaColunaBorda(casaEfetiva);
-    int coluna = pos[0];
-    int linha = pos[1];
+        for (javafx.scene.Node node : tabuleiroGrid.getChildren()) {
+            Integer nodeCol = GridPane.getColumnIndex(node);
+            Integer nodeRow = GridPane.getRowIndex(node);
 
-    for (javafx.scene.Node node : tabuleiroGrid.getChildren()) {
-        Integer nodeCol = GridPane.getColumnIndex(node);
-        Integer nodeRow = GridPane.getRowIndex(node);
+            if (nodeCol != null && nodeRow != null && nodeCol == coluna && nodeRow == linha) {
+                if (node instanceof Label) {
+                    Label casaLabel = (Label) node;
 
-        if (nodeCol != null && nodeRow != null && nodeCol == coluna && nodeRow == linha) {
-            if (node instanceof Label) {
-                Label casaLabel = (Label) node;
+                    if (!(casaLabel.getGraphic() instanceof javafx.scene.layout.StackPane)) {
+                        javafx.scene.layout.StackPane stack = new javafx.scene.layout.StackPane();
+                        casaLabel.setGraphic(stack);
+                    }
 
-                if (!(casaLabel.getGraphic() instanceof javafx.scene.layout.StackPane)) {
-                    javafx.scene.layout.StackPane stack = new javafx.scene.layout.StackPane();
-                    casaLabel.setGraphic(stack);
+                    javafx.scene.layout.StackPane stack = (javafx.scene.layout.StackPane) casaLabel.getGraphic();
+
+                    if (!stack.getChildren().contains(circulo)) {
+                        stack.getChildren().add(circulo);
+                    }
+
+                    ajustarPosicionamentoMultiplosJogadores(stack);
+                    break;
                 }
-
-                javafx.scene.layout.StackPane stack = (javafx.scene.layout.StackPane) casaLabel.getGraphic();
-
-                if (!stack.getChildren().contains(circulo)) {
-                    stack.getChildren().add(circulo);
-                }
-
-                ajustarPosicionamentoMultiplosJogadores(stack);
-                break;
             }
         }
     }
-}
 
     private void ajustarPosicionamentoMultiplosJogadores(javafx.scene.layout.StackPane stack) {
         int numJogadores = stack.getChildren().size();
@@ -360,6 +352,29 @@ public class GameController {
         somaLabel.setText("-");
     }
 
+    @FXML
+    private void handleVoltarMenu() {
+        System.out.println("======> O BOTÃO DE VOLTAR FOI CLICADO COM SUCESSO! <======");
+
+        try {
+            // CORRIGIDO: Ajustado para o caminho real mapeado no seu projeto
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/setup_view.fxml"));
+            javafx.scene.Parent root = loader.load();
+        
+            // Recupera o Stage através do componente da tela
+            javafx.stage.Stage stage = (javafx.stage.Stage) jogarDadosBtn.getScene().getWindow();
+        
+            // Altera a cena para o menu inicial
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.setTitle("Jogo de Tabuleiro - Configuração Inicial");
+            stage.show();
+        
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+            logMensagem("\n❌ Erro crítico ao retornar para a tela inicial.");
+        }
+    }
+
     private void aplicarEfeitoCasa(Casa casa, Jogador jogador) {
         int numero = casa.getNumero();
 
@@ -454,8 +469,17 @@ public class GameController {
 
     private void finalizarJogo(Jogador vencedor) {
         jogoFinalizado = true;
+    
+        // Desativa os botões normais de rodada
         jogarDadosBtn.setDisable(true);
         proximoJogadorBtn.setVisible(false);
+        proximoJogadorBtn.setManaged(false);
+
+        // Garante que o botão de voltar esteja 100% ativo, visível e focável
+        voltarMenuBtn.setDisable(false);
+        voltarMenuBtn.setVisible(true);
+        voltarMenuBtn.setManaged(true);
+        voltarMenuBtn.requestFocus(); // Força o foco do sistema para ele
 
         List<Jogador> ranking = new ArrayList<>(jogo.getJogadores());
         ranking.sort((j1, j2) -> Integer.compare(j2.getPosicao(), j1.getPosicao()));
@@ -466,11 +490,11 @@ public class GameController {
         logMensagem(String.format("\n🏆 VENCEDOR: %s", vencedor.getNome()));
         logMensagem("\n📊 ESTATÍSTICAS FINAIS:\n");
 
-        for (int i = 0; i < ranking.size(); i++) {
-            Jogador j = ranking.get(i);
-            logMensagem(String.format("%d°) %s - Casa %d - %d jogadas",
-                    i + 1, j.getNome(), j.getPosicao(), j.getNumeroJogadas()));
-        }
+    for (int i = 0; i < ranking.size(); i++) {
+        Jogador j = ranking.get(i);
+        logMensagem(String.format("%d°) %s - Casa %d - %d jogadas",
+                i + 1, j.getNome(), j.getPosicao(), j.getNumeroJogadas()));
+    }
 
         logMensagem("\n" + "=".repeat(50));
 
@@ -546,21 +570,16 @@ public class GameController {
         int coluna = 0;
         int linha = 0;
 
-        // Lógica para contornar um quadrado 11x11 (índices de 0 a 10)
         if (numeroCasa <= 10) {
-            // Borda Superior: vai da esquerda para a direita (linha 0)
             coluna = numeroCasa;
             linha = 0;
         } else if (numeroCasa <= 20) {
-            // Borda Direita: vai de cima para baixo (coluna 10)
             coluna = 10;
             linha = numeroCasa - 10;
         } else if (numeroCasa <= 30) {
-            // Borda Inferior: vai da direita para a esquerda (linha 10)
             coluna = 10 - (numeroCasa - 20);
             linha = 10;
         } else {
-            // Borda Esquerda: vai de baixo para cima (coluna 0)
             coluna = 0;
             linha = 10 - (numeroCasa - 30);
         }
