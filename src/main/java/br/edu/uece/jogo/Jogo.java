@@ -1,7 +1,7 @@
-package main.java.br.edu.uece.jogo;
+package br.edu.uece.jogo;
 
-import main.java.br.edu.uece.model.jogador.Jogador;
-import main.java.br.edu.uece.model.casa.*;
+import br.edu.uece.model.jogador.*;
+import br.edu.uece.model.casa.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,33 +33,13 @@ public class Jogo {
         }
     }
 
-    public Jogador getJogadorAtual() {
-        return jogadores.get(indiceJogadorAtual);
-    }
-
-    public void proximoJogador() {
-        indiceJogadorAtual = (indiceJogadorAtual + 1) % jogadores.size();
-    }
-
-    public List<Jogador> getJogadores() {
-        return new ArrayList<>(jogadores);
-    }
-
-    public Tabuleiro getTabuleiro() {
-        return tabuleiro;
-    }
-
-    public boolean isJogoFinalizado() {
-        return jogoFinalizado;
-    }
-
-    public void finalizarJogo() {
-        this.jogoFinalizado = true;
-    }
-
-    public int getNumeroJogadores() {
-        return jogadores.size();
-    }
+    public Jogador getJogadorAtual() {return jogadores.get(indiceJogadorAtual);}
+    public void proximoJogador() {indiceJogadorAtual = (indiceJogadorAtual + 1) % jogadores.size();}
+    public List<Jogador> getJogadores() {return new ArrayList<>(jogadores);}
+    public Tabuleiro getTabuleiro() {return tabuleiro;}
+    public boolean isJogoFinalizado() {return jogoFinalizado;}
+    public void finalizarJogo() {this.jogoFinalizado = true;}
+    public int getNumeroJogadores() {return jogadores.size();}
 
     public Jogador getVencedor() {
         for (Jogador jogador : jogadores) {
@@ -70,9 +50,7 @@ public class Jogo {
         return null;
     }
 
-    public int getIndiceJogadorAtual() {
-        return indiceJogadorAtual;
-    }
+    public int getIndiceJogadorAtual() {return indiceJogadorAtual;}
 
     public void reiniciar() {
         for (Jogador jogador : jogadores) {
@@ -102,5 +80,13 @@ public class Jogo {
         }
 
         return sb.toString();
+    }
+
+    public void solicitarEscolhaParaVoltarInicio(Jogador j) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void transformarJogador(Jogador j, int carta) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

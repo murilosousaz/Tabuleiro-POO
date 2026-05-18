@@ -1,5 +1,6 @@
-package main.java.br.edu.uece.controller;
+package br.edu.uece.controller;
 
+import br.edu.uece.jogo.Jogo;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -9,9 +10,8 @@ import javafx.scene.shape.Circle;
 import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
 
-import main.java.br.edu.uece.model.casa.*;
-import main.java.br.edu.uece.model.jogador.*;
-import main.java.br.edu.uece.jogo.Jogo;
+import br.edu.uece.model.casa.*;
+import br.edu.uece.model.jogador.Jogador;
 
 import java.util.*;
 
@@ -78,13 +78,16 @@ public class GameController {
             }
         });
 
-        logMensagem("=== Jogo de Tabuleiro Iniciado ===");
-        logMensagem("Configure os jogadores e inicie o jogo!");
-
-        // Inicializar jogo automaticamente se jogadores foram configurados
-        if (jogadoresIniciais != null && !jogadoresIniciais.isEmpty()) {
-            inicializarJogo(jogadoresIniciais);
-        }
+        // CORRIGIDO: Colocado dentro de um runLater para evitar travar o carregamento do FXML
+        Platform.runLater(() -> {
+            logMensagem("=== Jogo de Tabuleiro Iniciado ===");
+            logMensagem("Configure os jogadores e inicie o jogo!");
+            
+            // Inicializar jogo automaticamente se jogadores foram configurados
+            if (jogadoresIniciais != null && !jogadoresIniciais.isEmpty()) {
+                inicializarJogo(jogadoresIniciais);
+            }
+        });
     }
 
     public static void setJogadoresIniciais(List<Jogador> jogadores) {
@@ -129,24 +132,23 @@ public class GameController {
     }
 
     private void renderizarTabuleiro() {
-        tabuleiroGrid.getChildren().clear();
+    tabuleiroGrid.getChildren().clear();
 
-        int numCasas = 40;
-        int colunasMax = 10;
+    // Criar as 40 casas posicionando-as apenas nas bordas do quadrado 11x11
+    for (int i = 0; i < 40; i++) {
+        Label casaLabel = new Label(String.valueOf(i));
+        casaLabel.setStyle(getEstiloCasa(i));
+        casaLabel.setPrefSize(60, 60);
+        casaLabel.setAlignment(javafx.geometry.Pos.CENTER);
 
-        for (int i = 0; i <= numCasas; i++) {
-            Label casaLabel = new Label(String.valueOf(i));
-            casaLabel.setStyle(getEstiloCasa(i));
-            casaLabel.setPrefSize(60, 60);
-            casaLabel.setAlignment(javafx.geometry.Pos.CENTER);
+        // Calcula a posição exata na borda do quadrado
+        int[] pos = calcularLinhaColunaBorda(i);
+        int coluna = pos[0];
+        int linha = pos[1];
 
-            // Calcular posição no grid (serpentear)
-            int linha = i / colunasMax;
-            int coluna = (linha % 2 == 0) ? (i % colunasMax) : (colunasMax - 1 - (i % colunasMax));
-
-            tabuleiroGrid.add(casaLabel, coluna, linha);
-        }
+        tabuleiroGrid.add(casaLabel, coluna, linha);
     }
+}
 
     private String getEstiloCasa(int numeroCasa) {
         String baseStyle = "-fx-border-color: #333; -fx-border-width: 1; -fx-font-size: 14px; -fx-font-weight: bold;";
@@ -167,7 +169,7 @@ public class GameController {
             return baseStyle + "-fx-background-color: #E91E63; -fx-text-fill: white;"; // Mágica
         }
 
-        return baseStyle + "-fx-background-color: #EEEEEE;";
+        return baseStyle + "-fx-background-color: #EEEEEE; -fx-text-fill: #333;";
     }
 
     private Circle criarCirculoJogador(Jogador jogador) {
@@ -179,52 +181,59 @@ public class GameController {
     }
 
     private void posicionarJogadorNoCasa(Jogador jogador, int numeroCasa) {
-        Circle circulo = jogadorCirculoMap.get(jogador);
-        if (circulo == null) return;
+    Circle circulo = jogadorCirculoMap.get(jogador);
+    if (circulo == null) return;
 
-        // Remover do pai anterior
-        if (circulo.getParent() != null) {
-            ((javafx.scene.layout.Pane) circulo.getParent()).getChildren().remove(circulo);
-        }
+    if (circulo.getParent() != null) {
+        ((javafx.scene.layout.Pane) circulo.getParent()).getChildren().remove(circulo);
+    }
 
-        // Encontrar a Label da casa
-        int colunasMax = 10;
-        int linha = numeroCasa / colunasMax;
-        int coluna = (linha % 2 == 0) ? (numeroCasa % colunasMax) : (colunasMax - 1 - (numeroCasa % colunasMax));
+    // Se o jogador passar da casa 40 (por exemplo, 42), ele trava na 40
+    int casaEfetiva = Math.min(numeroCasa, 40);
 
-        for (javafx.scene.Node node : tabuleiroGrid.getChildren()) {
-            Integer nodeCol = GridPane.getColumnIndex(node);
-            Integer nodeRow = GridPane.getRowIndex(node);
+    // Calcula a posição usando a nova lógica de borda quadrada
+    int[] pos = calcularLinhaColunaBorda(casaEfetiva);
+    int coluna = pos[0];
+    int linha = pos[1];
 
-            if (nodeCol != null && nodeRow != null && nodeCol == coluna && nodeRow == linha) {
-                if (node instanceof Label) {
-                    Label casaLabel = (Label) node;
+    for (javafx.scene.Node node : tabuleiroGrid.getChildren()) {
+        Integer nodeCol = GridPane.getColumnIndex(node);
+        Integer nodeRow = GridPane.getRowIndex(node);
 
-                    // Criar StackPane se não existir
-                    if (!(casaLabel.getGraphic() instanceof javafx.scene.layout.StackPane)) {
-                        javafx.scene.layout.StackPane stack = new javafx.scene.layout.StackPane();
-                        casaLabel.setGraphic(stack);
-                    }
+        if (nodeCol != null && nodeRow != null && nodeCol == coluna && nodeRow == linha) {
+            if (node instanceof Label) {
+                Label casaLabel = (Label) node;
 
-                    javafx.scene.layout.StackPane stack = (javafx.scene.layout.StackPane) casaLabel.getGraphic();
-
-                    // Adicionar círculo ao StackPane
-                    if (!stack.getChildren().contains(circulo)) {
-                        stack.getChildren().add(circulo);
-                    }
-
-                    // Ajustar posicionamento para múltiplos jogadores
-                    ajustarPosicionamentoMultiplosJogadores(stack);
-                    break;
+                if (!(casaLabel.getGraphic() instanceof javafx.scene.layout.StackPane)) {
+                    javafx.scene.layout.StackPane stack = new javafx.scene.layout.StackPane();
+                    casaLabel.setGraphic(stack);
                 }
+
+                javafx.scene.layout.StackPane stack = (javafx.scene.layout.StackPane) casaLabel.getGraphic();
+
+                if (!stack.getChildren().contains(circulo)) {
+                    stack.getChildren().add(circulo);
+                }
+
+                ajustarPosicionamentoMultiplosJogadores(stack);
+                break;
             }
         }
     }
+}
 
     private void ajustarPosicionamentoMultiplosJogadores(javafx.scene.layout.StackPane stack) {
         int numJogadores = stack.getChildren().size();
+        if (numJogadores <= 1) {
+            if (numJogadores == 1) {
+                stack.getChildren().get(0).setTranslateX(0);
+                stack.getChildren().get(0).setTranslateY(0);
+            }
+            return;
+        }
+
         double angulo = 2 * Math.PI / numJogadores;
-        double raio = 15;
+        double raio = 12;
 
         for (int i = 0; i < numJogadores; i++) {
             javafx.scene.Node node = stack.getChildren().get(i);
@@ -256,7 +265,6 @@ public class GameController {
 
         Jogador jogadorAtual = jogo.getJogadorAtual();
 
-        // Verificar se jogador deve pular rodada
         if (jogadorAtual.devePerderVez()) {
             logMensagem(String.format("\n[%s] perdeu a vez! Pulando rodada...", jogadorAtual.getNome()));
             jogadorAtual.setPerderVez(false);
@@ -270,7 +278,6 @@ public class GameController {
         int casaDestino;
 
         if (modoDebug) {
-            // Modo debug: usuário escolhe a casa
             String inputCasa = casaDebugField.getText().trim();
             if (inputCasa.isEmpty()) {
                 mostrarErro("Digite o número da casa!");
@@ -297,7 +304,6 @@ public class GameController {
             }
 
         } else {
-            // Modo normal: jogar dados
             int[] dados = jogadorAtual.jogarDados();
             int dado1 = dados[0];
             int dado2 = dados[1];
@@ -305,66 +311,36 @@ public class GameController {
 
             casaDestino = posicaoAtual + soma;
 
-            // Atualizar labels dos dados
             dado1Label.setText(String.valueOf(dado1));
             dado2Label.setText(String.valueOf(dado2));
             somaLabel.setText(String.valueOf(soma));
 
             logMensagem(String.format("\n%s jogou os dados: [%d] + [%d] = %d",
                     jogadorAtual.getNome(), dado1, dado2, soma));
-
-            // Verificar dados iguais
-            boolean dadosIguais = (dado1 == dado2);
-            if (dadosIguais) {
-                logMensagem("🎲 DADOS IGUAIS! Jogador ganha outra rodada!");
-            }
         }
 
-        // Mover jogador
         jogadorAtual.mover(casaDestino);
         int posicaoFinal = jogadorAtual.getPosicao();
 
         logMensagem(String.format("Movendo de casa %d para casa %d", posicaoAtual, posicaoFinal));
-
-        // Atualizar posição visual
         posicionarJogadorNoCasa(jogadorAtual, posicaoFinal);
 
-        // Verificar vitória
         if (posicaoFinal >= 40) {
             logMensagem(String.format("\n🏆 %s VENCEU O JOGO! 🏆", jogadorAtual.getNome()));
             finalizarJogo(jogadorAtual);
             return;
         }
 
-        // Aplicar efeito da casa
         Casa casa = jogo.getTabuleiro().getCasa(posicaoFinal);
         aplicarEfeitoCasa(casa, jogadorAtual);
 
-        // Incrementar contador de jogadas
         jogadorAtual.incrementarJogadas();
-
-        // Atualizar placar
         atualizarPlacar();
 
-        // Verificar se joga novamente
-        if (!modoDebug && !aguardandoProximoJogador) {
-            // Verificar dados iguais
-            // A lógica de dados iguais seria implementada aqui
-            // Por simplicidade, vamos sempre passar para o próximo
-            aguardandoProximoJogador = true;
-            jogarDadosBtn.setDisable(true);
-            proximoJogadorBtn.setVisible(true);
-            proximoJogadorBtn.setManaged(true);
-        }
-
-        // Limpar campo debug
-        if (modoDebug) {
-            casaDebugField.clear();
-            aguardandoProximoJogador = true;
-            jogarDadosBtn.setDisable(true);
-            proximoJogadorBtn.setVisible(true);
-            proximoJogadorBtn.setManaged(true);
-        }
+        aguardandoProximoJogador = true;
+        jogarDadosBtn.setDisable(true);
+        proximoJogadorBtn.setVisible(true);
+        proximoJogadorBtn.setManaged(true);
     }
 
     @FXML
@@ -379,7 +355,6 @@ public class GameController {
         proximoJogadorBtn.setVisible(false);
         proximoJogadorBtn.setManaged(false);
 
-        // Limpar dados
         dado1Label.setText("-");
         dado2Label.setText("-");
         somaLabel.setText("-");
@@ -388,25 +363,20 @@ public class GameController {
     private void aplicarEfeitoCasa(Casa casa, Jogador jogador) {
         int numero = casa.getNumero();
 
-        // Casas 10, 25, 38: Perde a próxima vez
         if (numero == 10 || numero == 25 || numero == 38) {
             jogador.setPerderVez(true);
             logMensagem("⏸️  Casa Especial: Jogador perde a próxima rodada!");
         }
 
-        // Casa 13: Surpresa - troca tipo de jogador
         else if (numero == 13) {
             String tipoAnterior = jogador.getTipo();
-            // Implementar lógica de carta surpresa
             String[] tipos = {"Normal", "Sorte", "Azarado"};
             String novoTipo = tipos[new Random().nextInt(tipos.length)];
 
             logMensagem(String.format("🎴 Casa Surpresa! Jogador era %s", tipoAnterior));
-            // Aqui você implementaria a troca de tipo do jogador
             logMensagem(String.format("   Carta sorteada: Agora é jogador %s!", novoTipo));
         }
 
-        // Casas 5, 15, 30: Sorte (avança 3 se não for azarado)
         else if (numero == 5 || numero == 15 || numero == 30) {
             if (!jogador.getTipo().equals("Azarado")) {
                 int novaPosicao = Math.min(jogador.getPosicao() + 3, 40);
@@ -414,7 +384,6 @@ public class GameController {
                 posicionarJogadorNoCasa(jogador, novaPosicao);
                 logMensagem("🍀 Casa da Sorte! Avança 3 casas!");
 
-                // Verificar vitória após avanço
                 if (novaPosicao >= 40) {
                     logMensagem(String.format("\n🏆 %s VENCEU O JOGO! 🏆", jogador.getNome()));
                     finalizarJogo(jogador);
@@ -424,14 +393,11 @@ public class GameController {
             }
         }
 
-        // Casas 17, 27: Escolhe jogador para voltar ao início
         else if (numero == 17 || numero == 27) {
             logMensagem("⚔️  Casa Especial: Escolha um jogador para voltar ao início!");
-            // Aqui seria implementada a escolha via interface
-            escolherJogadorParaVoltar();
+            Platform.runLater(this::escolherJogadorParaVoltar);
         }
 
-        // Casas 20, 35: Mágica - troca com último colocado
         else if (numero == 20 || numero == 35) {
             Jogador ultimoColocado = encontrarUltimoColocado();
             if (ultimoColocado != null && ultimoColocado != jogador) {
@@ -469,6 +435,7 @@ public class GameController {
             jogadorEscolhido.mover(0);
             posicionarJogadorNoCasa(jogadorEscolhido, 0);
             logMensagem(String.format("   %s voltou para o início!", jogadorEscolhido.getNome()));
+            atualizarPlacar();
         });
     }
 
@@ -482,7 +449,6 @@ public class GameController {
                 ultimo = j;
             }
         }
-
         return ultimo;
     }
 
@@ -491,7 +457,6 @@ public class GameController {
         jogarDadosBtn.setDisable(true);
         proximoJogadorBtn.setVisible(false);
 
-        // Ordenar jogadores por posição
         List<Jogador> ranking = new ArrayList<>(jogo.getJogadores());
         ranking.sort((j1, j2) -> Integer.compare(j2.getPosicao(), j1.getPosicao()));
 
@@ -509,7 +474,6 @@ public class GameController {
 
         logMensagem("\n" + "=".repeat(50));
 
-        // Mostrar diálogo de vitória
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Jogo Finalizado");
         alert.setHeaderText("🏆 Temos um vencedor! 🏆");
@@ -531,7 +495,6 @@ public class GameController {
 
         placarListView.getItems().clear();
 
-        // Ordenar por posição (maior primeiro)
         List<Jogador> ranking = new ArrayList<>(jogo.getJogadores());
         ranking.sort((j1, j2) -> Integer.compare(j2.getPosicao(), j1.getPosicao()));
 
@@ -557,7 +520,9 @@ public class GameController {
 
     private void logMensagem(String mensagem) {
         Platform.runLater(() -> {
-            logArea.appendText(mensagem + "\n");
+            if (logArea != null) {
+                logArea.appendText(mensagem + "\n");
+            }
         });
     }
 
@@ -575,5 +540,31 @@ public class GameController {
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
         alert.showAndWait();
+    }
+    
+    private int[] calcularLinhaColunaBorda(int numeroCasa) {
+        int coluna = 0;
+        int linha = 0;
+
+        // Lógica para contornar um quadrado 11x11 (índices de 0 a 10)
+        if (numeroCasa <= 10) {
+            // Borda Superior: vai da esquerda para a direita (linha 0)
+            coluna = numeroCasa;
+            linha = 0;
+        } else if (numeroCasa <= 20) {
+            // Borda Direita: vai de cima para baixo (coluna 10)
+            coluna = 10;
+            linha = numeroCasa - 10;
+        } else if (numeroCasa <= 30) {
+            // Borda Inferior: vai da direita para a esquerda (linha 10)
+            coluna = 10 - (numeroCasa - 20);
+            linha = 10;
+        } else {
+            // Borda Esquerda: vai de baixo para cima (coluna 0)
+            coluna = 0;
+            linha = 10 - (numeroCasa - 30);
+        }
+
+        return new int[]{coluna, linha};
     }
 }

@@ -1,4 +1,7 @@
-package main.java.br.edu.uece.model.casa;
+package br.edu.uece.model.casa;
+
+import br.edu.uece.jogo.Jogo;
+import br.edu.uece.model.jogador.Jogador;
 
 public class CasaSorte extends Casa {
 
@@ -25,5 +28,10 @@ public class CasaSorte extends Casa {
     @Override
     public String toString() {
         return String.format("Casa %d [Sorte +%d]", getNumero(), CASAS_AVANCAR);
+    }
+
+    @Override
+    public void aplicarEfeito(Jogador j, Jogo jogo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

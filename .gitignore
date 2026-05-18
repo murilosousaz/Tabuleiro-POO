@@ -15,6 +15,7 @@ out/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+.metadata/
 
 ### NetBeans ###
 /nbproject/private/
@@ -28,3 +29,4 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/target/
