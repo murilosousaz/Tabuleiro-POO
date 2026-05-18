@@ -46,12 +46,13 @@ A interface foi projetada visando harmonia visual e prevenção de transbordo em
 * **Grid Geométrico:** O tabuleiro possui dimensões fixas quadradas de 670x670 pixels eliminando distorções de proporção.
 * **Controles Consolidados:** O painel inferior estende-se horizontalmente por toda a janela, agrupando os dados, os botões de ação e a caixa embutida do **Modo Debug** no mesmo alinhamento.
 
-## 🖥 TELA INCIAL
-![alt text](JANELAINICIAL.png)
+## 🖥️ TELA INICIAL
+![JANELAINICIAL](src/main/resources/screenshots/JANELAINICIAL.png)
+
 ---
 
 ## 🎮 JOGO RODANDO
-![alt text](JOGOFUNCIONANDO.png)
+![JOGOFUNCIONANDO](src/main/resources/screenshots/JOGOFUNCIONANDO.png)
 ---
 
 ## 🛠️ TECNOLOGIAS UTILIZADAS
