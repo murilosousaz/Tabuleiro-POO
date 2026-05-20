@@ -64,7 +64,7 @@ A interface foi projetada visando harmonia visual e prevenção de transbordo em
 
 ---
 
-## 🏃 Para Executar o Projeto
+## 🏃 PARA EXECUTAR O PROJETO
 
 Certifique-se de ter o **Maven** e um **JDK** compatível instalados em sua máquina.
 
